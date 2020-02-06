@@ -15,7 +15,9 @@
     <input type="text" id="PokemonName" placeholder="Enter Pokemon or id here" name="PokemonName"/>
     <button type="submit" name="button" value="button" id="callApi"/>
     Search </button>
-    <!--<input type="button" name="click" value="Search" id="callApi" onclick="getInput()"/>-->
+    <!--
+    put action = " # " to get the button click
+    <input type="button" name="click" value="Search" id="callApi" onclick="getInput()"/>-->
 </form>
 
 <?php
@@ -37,6 +39,8 @@ function getInformation($dataApi)
     $response = json_decode($dataApi, true); //because of true, it's in an array
     // get species url
     $speciesURL = $response['species']['url'];
+    // get evolution_chain url
+    //$evolutionChainURL = $response['evolution_chain']['url'];
     // get Pokemon Name
     $pokName = $response['name'];
     // get Pokemon id
@@ -58,7 +62,8 @@ function getInformation($dataApi)
         }
     }
     printInfo($pokName, $pokId, $pokImg, $movesArray);
-    sendURL($speciesURL);
+    sendURLForPrevious($speciesURL);
+    //sendURLForNext($evolutionChainURL);
 }
 
 // print the data on the screen
@@ -79,7 +84,7 @@ function printInfo($pokName, $pokId, $pokImg, $pokMoves)
 }
 
 // get the previous evolve if there is one
-function sendURL($speciesURL)
+function sendURLForPrevious($speciesURL)
 {
     $speciesURLApi = file_get_contents($speciesURL);
     $responseSpeciesURL = json_decode($speciesURLApi, true); //because of true, it's in an array
@@ -93,6 +98,21 @@ function sendURL($speciesURL)
         <h3 class="nameStyle">This is the first evolution </h3>  </div>';
     }
 }
+
+/*function sendURLForNext($evolutionChainURL)
+{
+    $evolutionChainURLApi = file_get_contents($evolutionChainURL);
+    $responseEvolutionChainURL = json_decode($evolutionChainURLApi, true); //because of true, it's in an array
+    // get species url
+    $evolutionChainURL = $responseEvolutionChainURL['species'];
+    if ($evolutionChainURL != null) {
+        //echo $evolutionChainURL['species']['url'];
+        getArray($evolutionChainURL['species']['url']);
+    } else {
+        echo '<div class="divStyle">
+        <h3 class="nameStyle">This is the last evolution </h3>  </div>';
+    }
+}*/
 
 ?>
 </body>
